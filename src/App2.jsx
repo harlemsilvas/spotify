@@ -126,3 +126,6 @@
 // Spread operator
 // ... cria a cópia
 // const newObj = {...obj} endereço onde estão os objetos
+// QUANDO componentes se re-renderizão ?
+// Umas das ocasiões é quando uma variável de estado usada por esse componente é atualizada
+// Hook - useState
