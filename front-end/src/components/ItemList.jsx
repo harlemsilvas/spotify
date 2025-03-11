@@ -27,6 +27,7 @@ const ItemList = ({ title, items, itemsArray, path, idPath }) => {
         ) : (
           <></>
         )}
+        {/* console.log(path); */}
       </div>
       <div className="item-list__container">
         {itemsArray
