@@ -9,9 +9,10 @@ const ItemList = ({ title, items, itemsArray, path, idPath }) => {
   // const pathname = useLocation().pathname;
   // abaixo usamos o conceito de desestruturação
   const { pathname } = useLocation();
-  console.log(pathname);
+  //console.log(pathname);
   const isHome = pathname === "/";
   const finalItems = isHome ? items : Infinity;
+
   // let finalItems;
   // isHome ? (finalItems = items) : (finalItems = Infinity);
 

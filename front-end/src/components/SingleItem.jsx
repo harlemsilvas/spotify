@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlay } from "@fortawesome/free-solid-svg-icons/faCirclePlay";
+import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const SingleItem = ({ _id, name, image, banner, artist, idPath }) => {
@@ -11,23 +11,32 @@ const SingleItem = ({ _id, name, image, banner, artist, idPath }) => {
           <img
             className="single-item__image"
             src={image}
-            alt={`Imagem_Artista ${name}`}
+            alt={`Imagem do Artista ${name}`}
           />
-          {/* <FontAwesomeIcon icon="fa-solid fa-circle-plat" /> */}
-          <FontAwesomeIcon className="single-item__icon" icon={faCirclePlay} />
         </div>
+
+        <FontAwesomeIcon className="single-item__icon " icon={faCirclePlay} />
       </div>
+
       <div className="single-item__texts">
-        <p className="single-item__title">{name}</p>
-        <p className="single-item__type">
-          {artist ?? "Artista"}
-          {/* 3 formas de executar a validação */}
-          {/* {artist ? artist : "Artista"} */}
-          {/* {artist === undefined ? "Artista" : artist} */}
-        </p>
+        <div className="single-item__2lines">
+          <p className="single-item__title">{name}</p>
+        </div>
+
+        <p className="single-item__type">{artist ?? "Artista"}</p>
       </div>
     </Link>
   );
 };
 
 export default SingleItem;
+
+{
+  /* 3 formas de executar a validação */
+}
+{
+  /* {artist ? artist : "Artista"} */
+}
+{
+  /* {artist === undefined ? "Artista" : artist} */
+}

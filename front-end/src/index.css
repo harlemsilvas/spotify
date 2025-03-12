@@ -498,3 +498,150 @@ img {
     grid-column: 1 / span 2;
   }
 }
+
+.player__bar {
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  margin: 0 10px;
+  flex-grow: 1;
+  position: relative;
+}
+
+.player__bar-progress {
+  height: 100%;
+  background: #1db954;
+  border-radius: 2px;
+  width: var(--_progress, 0%);
+  transition: width 0.1s linear;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+
+.player__bar {
+  position: relative;
+  cursor: pointer;
+  height: 15px; /* Aumente a área clicável */
+}
+
+.player__bar-progress {
+  height: 4px;
+  background: #1db954;
+  pointer-events: none; /* Permite cliques através da barra */
+}
+
+.player__bar::after {
+  content: '';
+  position: absolute;
+  left: var(--_progress, 0%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.player__bar:hover::after,
+.player__bar:active::after {
+  opacity: 1;
+}
+
+.player__bar:active {
+  cursor: grabbing;
+}
+
+/* Estilo durante o arrasto */
+.player.dragging .player__bar {
+  cursor: grabbing;
+}
+
+.player.dragging .player__bar::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* Transição suave para a bolinha indicadora */
+.player__bar::after {
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+
+/* novas implementacoes */
+.player {
+  padding: 1rem;
+}
+
+.player__controllers {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.player__icon {
+  font-size: 1.5rem;
+  color: #333;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.player__icon--play {
+  font-size: 2rem;
+}
+
+.player__icon:hover {
+  color: #1db954;
+}
+
+.player__progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.player__bar {
+  position: relative;
+  flex-grow: 1;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.player__bar-progress {
+  height: 100%;
+  background: #1db954;
+  border-radius: 2px;
+  width: var(--_progress, 0%);
+  transition: width 0.1s linear;
+}
+
+.player.dragging .player__bar {
+  cursor: grabbing;
+}
+
+.player__bar::after {
+  content: '';
+  position: absolute;
+  left: var(--_progress, 0%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.player__bar:hover::after,
+.player.dragging .player__bar::after {
+  opacity: 1;
+}

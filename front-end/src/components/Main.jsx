@@ -10,10 +10,10 @@ const Main = ({ type }) => {
       {type === "artists" || type === undefined ? (
         <ItemList
           title="Artistas"
-          items={5}
+          items={10}
           itemsArray={artistArray}
-          path="artists"
-          idPath="artist"
+          path="/artists"
+          idPath="/artist"
         />
       ) : (
         <></>
@@ -22,10 +22,10 @@ const Main = ({ type }) => {
       {type === "songs" || type === undefined ? (
         <ItemList
           title="Músicas"
-          items={15}
+          items={20}
           itemsArray={songsArray}
-          path="songs"
-          idPath="song"
+          path="/songs"
+          idPath="/song"
         />
       ) : (
         <></>

@@ -8,19 +8,24 @@ import {
   faForwardStep,
 } from "@fortawesome/free-solid-svg-icons";
 
+// ... (funções formatTime e timeInSeconds permanecem iguais)
 const formatTime = (timeInSeconds) => {
   const minutes = Math.floor(timeInSeconds / 60)
     .toString()
     .padStart(2, "0");
-  const seconds = Math.floor(timeInSeconds % 60)
+  const seconds = Math.floor(timeInSeconds - minutes * 60)
     .toString()
     .padStart(2, "0");
+
   return `${minutes}:${seconds}`;
 };
 
 const timeInSeconds = (timeString) => {
-  const [minutes, seconds] = timeString.split(":").map(Number);
-  return minutes * 60 + seconds;
+  const splitArray = timeString.split(":");
+  const minutes = Number(splitArray[0]);
+  const seconds = Number(splitArray[1]);
+
+  return seconds + minutes * 60;
 };
 
 const Player = ({
@@ -31,13 +36,23 @@ const Player = ({
 }) => {
   const audioPlayer = useRef(null);
   const progressBar = useRef(null);
-  const progressContainer = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(formatTime(0));
-  const [isDragging, setIsDragging] = useState(false);
   const durationInSeconds = timeInSeconds(duration);
 
-  // Efeito para resetar o player quando a música muda
+  // console.log(audioPlayer.current.play());
+  // console.log(durationInSeconds);
+
+  const playPause = () => {
+    isPlaying ? audioPlayer.current.pause() : audioPlayer.current.play();
+
+    setIsPlaying(!isPlaying);
+    // console.log(formatTime(audioPlayer.current.currentTime));
+  };
+
+  // setCurrentTime(formatTime(audioPlayer.current.currentTime));
+
+  // Efeito para mudança de música
   useEffect(() => {
     const currentAudio = audioPlayer.current;
 
@@ -59,13 +74,13 @@ const Player = ({
     resetPlayer();
   }, [audio, isPlaying]);
 
-  // Efeito principal para controle de progresso
+  // Efeito principal para controle de tempo
   useEffect(() => {
     const currentAudio = audioPlayer.current;
     let intervalId;
 
     const updateProgress = () => {
-      if (!currentAudio || isDragging) return;
+      if (!currentAudio) return;
 
       setCurrentTime(formatTime(currentAudio.currentTime));
       progressBar.current.style.setProperty(
@@ -76,7 +91,7 @@ const Player = ({
 
     const handleEnded = () => {
       setIsPlaying(false);
-      // Adicione lógica para próxima música automática aqui
+      // Lógica adicional para próximo track
     };
 
     if (currentAudio) {
@@ -90,54 +105,10 @@ const Player = ({
         currentAudio.removeEventListener("ended", handleEnded);
       }
     };
-  }, [isPlaying, durationInSeconds, isDragging]);
-
-  // Controle de play/pause
-  const playPause = () => {
-    if (!audioPlayer.current) return;
-
-    if (isPlaying) {
-      audioPlayer.current.pause();
-    } else {
-      audioPlayer.current
-        .play()
-        .catch((error) => console.log("Play error:", error));
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  // Controles de arrasto na barra de progresso
-  const handleProgressClick = (e) => {
-    if (!audioPlayer.current || !progressContainer.current) return;
-
-    const rect = progressContainer.current.getBoundingClientRect();
-    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    audioPlayer.current.currentTime = durationInSeconds * pos;
-  };
-
-  const handleDragStart = (e) => {
-    setIsDragging(true);
-    handleDragMove(e);
-  };
-
-  const handleDragMove = (e) => {
-    if (!isDragging || !audioPlayer.current || !progressContainer.current)
-      return;
-
-    const rect = progressContainer.current.getBoundingClientRect();
-    const clientX = e.touches?.[0]?.clientX || e.clientX;
-    const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-
-    audioPlayer.current.currentTime = durationInSeconds * pos;
-    setCurrentTime(formatTime(durationInSeconds * pos));
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-  };
+  }, [isPlaying, durationInSeconds]);
 
   return (
-    <div className={`player ${isDragging ? "dragging" : ""}`}>
+    <div className="player">
       <div className="player__controllers">
         <Link
           to={`/song/${randomIdFromArtist}`}
@@ -162,28 +133,13 @@ const Player = ({
 
       <div className="player__progress">
         <p>{currentTime}</p>
-        <div
-          className="player__bar"
-          ref={progressContainer}
-          onClick={handleProgressClick}
-          onMouseDown={handleDragStart}
-          onMouseMove={handleDragMove}
-          onMouseUp={handleDragEnd}
-          onMouseLeave={handleDragEnd}
-          onTouchStart={handleDragStart}
-          onTouchMove={handleDragMove}
-          onTouchEnd={handleDragEnd}
-          role="slider"
-          aria-valuenow={audioPlayer.current?.currentTime || 0}
-          aria-valuemin="0"
-          aria-valuemax={durationInSeconds}
-        >
+        <div className="player__bar">
           <div ref={progressBar} className="player__bar-progress"></div>
         </div>
         <p>{duration}</p>
       </div>
 
-      <audio ref={audioPlayer} src={audio} preload="auto" />
+      <audio ref={audioPlayer} src={audio} preload="auto"></audio>
     </div>
   );
 };

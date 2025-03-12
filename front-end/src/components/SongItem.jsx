@@ -13,10 +13,11 @@ const SongItem = ({ image, name, duration, artist, audio, _id, index }) => {
             alt={`Imagem da Música ${name}`}
             className="song-item__image"
           />
+
           <p className="song-item__name">{name}</p>
         </div>
       </div>
-      <p>2:30</p>
+      <p>{duration}</p>
     </Link>
   );
 };
